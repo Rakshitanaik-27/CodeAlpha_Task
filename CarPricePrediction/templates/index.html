@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Price Prediction</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Car Price Predictor</h1>
+        <form id="predict-form">
+            <label>Car Name (encoded int):</label>
+            <input type="number" name="Car_Name" required min="0">
+            
+            <label>Year:</label>
+            <input type="number" name="Year" required>
+            
+            <label>Present Price (Lakhs):</label>
+            <input type="number" step="0.01" name="Present_Price" required>
+            
+            <label>Driven kms:</label>
+            <input type="number" name="Driven_kms" required>
+            
+            <label>Fuel Type (encoded int):</label>
+            <input type="number" name="Fuel_Type" required min="0">
+            
+            <label>Selling Type (encoded int):</label>
+            <input type="number" name="Selling_type" required min="0">
+            
+            <label>Transmission (encoded int):</label>
+            <input type="number" name="Transmission" required min="0">
+            
+            <label>Owner:</label>
+            <input type="number" name="Owner" required min="0">
+            
+            <button type="submit">Predict</button>
+        </form>
+        <h2 id="result"></h2>
+    </div>
+    <script>
+        document.getElementById('predict-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            if (result.prediction)
+                document.getElementById('result').innerText = "Predicted Selling Price: ₹" + result.prediction + " Lakhs";
+            else
+                document.getElementById('result').innerText = "Error: " + result.error;
+        });
+    </script>
+</body>
+</html>
